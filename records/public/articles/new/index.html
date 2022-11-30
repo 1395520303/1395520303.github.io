@@ -1,0 +1,658 @@
+
+
+
+<!DOCTYPE html>
+<html
+  lang="en"
+  dir="ltr"
+  class="scroll-smooth"
+  data-default-appearance="dark"
+  data-auto-appearance="true"
+><head>
+  <meta charset="utf-8" />
+  
+    <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="rgb(255,255,255)" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>使用Prisma连接mysql &middot; 小张的博客</title>
+    <meta name="title" content="使用Prisma连接mysql &middot; 小张的博客" />
+  
+  <meta name="description" content="第一次写博客有点不知所措，随便聊聊吧😋 之前跟着学Nestjs的时候视频里用了prisma，当时听的似懂非懂，感觉Nestjs好用又不好用，Nestjs没记住多少但是记住了prisma，所以现在想仔细学一下 本篇文章只是介绍一下prisma连接数据库（我用的是mysql）以及一些简单的操作（复杂的我暂时还用不上），所以如果有讲的不好的请多多见谅🤧" />
+  
+  
+  
+  <link rel="canonical" href="https://1395520303.github.io/articles/new/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link
+    type="text/css"
+    rel="stylesheet"
+    href="/css/main.bundle.min.b15bed9c75c13ca3a738d365165ea777e34f367687cb02db8605dcf7786b76165f84c3f19f2c5d126d63d5597fe5ea155750bc6b0d4b822e90a9a8641b628437.css"
+    integrity="sha512-sVvtnHXBPKOnONNlFl6nd&#43;NPNnaHywLbhgXc93hrdhZfhMPxnyxdEm1j1Vl/5eoVV1C8aw1Lgi6QqahkG2KENw=="
+  />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.1e44157c1e51b46341ce2c94716dd3dd1ef30c28e7d1c9f3b9db80877bfe72bc66b00d8a662f317840016acbed93c5f18c3d9268c8b957021ee74d0b04adf6c5.js" integrity="sha512-HkQVfB5RtGNBziyUcW3T3R7zDCjn0cnzuduAh3v&#43;crxmsA2KZi8xeEABasvtk8XxjD2SaMi5VwIe500LBK32xQ=="></script>
+  
+    
+    
+    
+  
+  
+  
+  
+    
+    <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.4bc4580237fb0fbd6ddf46ce43101e62d3d01f76b60f6ceda10e5ae13803eb3a2ff2c0a8d1e7095d8615d0b56605bdbca2d4e3e23eb3de0bea25d383f5cc2aa6.js" integrity="sha512-S8RYAjf7D71t30bOQxAeYtPQH3a2D2ztoQ5a4TgD6zov8sCo0ecJXYYV0LVmBb28otTj4j6z3gvqJdOD9cwqpg==" data-copy="Copy" data-copied="Copied"></script>
+  
+  
+  
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:title" content="使用Prisma连接mysql" />
+<meta property="og:description" content="第一次写博客有点不知所措，随便聊聊吧😋 之前跟着学Nestjs的时候视频里用了prisma，当时听的似懂非懂，感觉Nestjs好用又不好用，Nestjs没记住多少但是记住了prisma，所以现在想仔细学一下 本篇文章只是介绍一下prisma连接数据库（我用的是mysql）以及一些简单的操作（复杂的我暂时还用不上），所以如果有讲的不好的请多多见谅🤧" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://1395520303.github.io/articles/new/" /><meta property="article:section" content="articles" />
+<meta property="article:published_time" content="2022-11-20T10:32:20+08:00" />
+<meta property="article:modified_time" content="2022-11-20T10:32:20+08:00" /><meta property="og:site_name" content="小张的博客" />
+
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用Prisma连接mysql"/>
+<meta name="twitter:description" content="第一次写博客有点不知所措，随便聊聊吧😋 之前跟着学Nestjs的时候视频里用了prisma，当时听的似懂非懂，感觉Nestjs好用又不好用，Nestjs没记住多少但是记住了prisma，所以现在想仔细学一下 本篇文章只是介绍一下prisma连接数据库（我用的是mysql）以及一些简单的操作（复杂的我暂时还用不上），所以如果有讲的不好的请多多见谅🤧"/>
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "文章",
+    "name": "使用Prisma连接mysql",
+    "headline": "使用Prisma连接mysql",
+    
+    "abstract": "第一次写博客有点不知所措，随便聊聊吧😋 之前跟着学Nestjs的时候视频里用了prisma，当时听的似懂非懂，感觉Nestjs好用又不好用，Nestjs没记住多少但是记住了prisma，所以现在想仔细学一下 本篇文章只是介绍一下prisma连接数据库（我用的是mysql）以及一些简单的操作（复杂的我暂时还用不上），所以如果有讲的不好的请多多见谅🤧",
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/1395520303.github.io\/articles\/new\/",
+    "author" : {
+      "@type": "Person",
+      "name": "张某人"
+    },
+    "copyrightYear": "2022",
+    "dateCreated": "2022-11-20T10:32:20\u002b08:00",
+    "datePublished": "2022-11-20T10:32:20\u002b08:00",
+    
+    "dateModified": "2022-11-20T10:32:20\u002b08:00",
+    
+    
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "377"
+  }]
+  </script>
+
+
+  
+  <meta name="author" content="张某人" />
+  
+    
+      <link href="https://github.com/1395520303" rel="me" />
+    
+  
+  
+  
+
+
+
+
+
+
+  
+  
+  
+  
+
+
+  
+  
+</head>
+<body
+    class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32"
+  >
+    <div id="the-top" class="absolute flex self-center">
+      <a
+        class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+        href="#main-content"
+        ><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400"
+          >&darr;</span
+        >Skip to main content</a
+      >
+    </div>
+    
+    
+      <header class="py-6 font-semibold text-neutral-900 dark:text-neutral print:hidden sm:py-10">
+  <nav class="flex items-start justify-between sm:items-center">
+    
+    <div class="flex flex-row items-center">
+      
+  <a
+    class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+    rel="me"
+    href="/"
+    >小张的博客</a
+  >
+
+      
+
+    </div>
+    
+    
+      <ul class="flex list-none flex-col ltr:text-right rtl:text-left sm:flex-row">
+        
+          
+            <li class="mb-1 sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+              <a
+                class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+                href="/articles/"
+                title="文章"
+                >文章</a
+              >
+            </li>
+          
+            <li class="mb-1 sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+              <a
+                class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+                href="/categories/"
+                title="Categories"
+                >分类</a
+              >
+            </li>
+          
+            <li class="mb-1 sm:mb-0 ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+              <a
+                class="decoration-primary-500 hover:underline hover:decoration-2 hover:underline-offset-2"
+                href=""
+                title=""
+                >记录</a
+              >
+            </li>
+          
+        
+        
+          <li class="ltr:sm:mr-7 ltr:sm:last:mr-0 rtl:sm:ml-7 rtl:sm:last:ml-0">
+            <button
+              id="search-button"
+              class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+              title="Search (/)"
+            >
+              
+
+  <span class="relative inline-block align-text-bottom icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+          </li>
+        
+      </ul>
+    
+  </nav>
+</header>
+
+    
+    <div class="relative flex flex-col grow">
+      <main id="main-content" class="grow">
+        
+  <article>
+    <header class="max-w-prose">
+      
+      <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+        使用Prisma连接mysql
+      </h1>
+      <div class="mt-8 mb-12 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+        
+
+
+
+
+
+  
+  
+
+
+
+  
+
+  
+  
+    
+  
+
+  
+
+  
+
+  
+    
+  
+
+  
+
+  <div class="flex flex-row flex-wrap items-center">
+    
+    
+      <time datetime="2022-11-20 10:32:20 &#43;0800 CST">2022年11月20日</time><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">2 分钟</span>
+    
+
+    
+    
+  </div>
+
+  
+  
+
+
+      </div>
+      
+    </header>
+    <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+      
+      <div class="min-w-0 min-h-0 max-w-prose grow">
+        <blockquote>
+<p>第一次写博客有点不知所措，随便聊聊吧😋<br/>
+之前跟着学Nestjs的时候视频里用了prisma，当时听的似懂非懂，感觉Nestjs好用又不好用，Nestjs没记住多少但是记住了prisma，所以现在想仔细学一下<br/>
+本篇文章只是介绍一下prisma连接数据库（我用的是mysql）以及一些简单的操作（复杂的我暂时还用不上），所以如果有讲的不好的请多多见谅🤧</p>
+</blockquote>
+<div class="flex px-4 py-3 rounded-md bg-primary-100 dark:bg-primary-900">
+  <span class="text-primary-400 ltr:pr-3 rtl:pl-3">
+    
+
+  <span class="relative inline-block align-text-bottom icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M506.3 417l-213.3-364c-16.33-28-57.54-28-73.98 0l-213.2 364C-10.59 444.9 9.849 480 42.74 480h426.6C502.1 480 522.6 445 506.3 417zM232 168c0-13.25 10.75-24 24-24S280 154.8 280 168v128c0 13.25-10.75 24-23.1 24S232 309.3 232 296V168zM256 416c-17.36 0-31.44-14.08-31.44-31.44c0-17.36 14.07-31.44 31.44-31.44s31.44 14.08 31.44 31.44C287.4 401.9 273.4 416 256 416z"/></svg>
+
+  </span>
+
+
+  </span>
+  <span class="dark:text-neutral-300"><strong>注意</strong> 本教程需要安装Node.js（12.2及以上）</span>
+</div>
+
+<h2 id="1安装prisma" class="relative group">1.安装<em>Prisma</em> <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#1%e5%ae%89%e8%a3%85prisma" aria-label="锚点">#</a></span></h2>
+<p>先建立一个文件夹,这里我就建立一个叫做prisma-mysql的文件夹</p>
+<pre><code>mkdir prisma-mysql 
+cd prisma-mysql
+</code></pre>
+<p>然后我们初始化一下并添加依赖</p>
+<pre><code>npm init -y
+npm i prisma -D
+</code></pre>
+<p>现在我们就可以调用Prisma CLI了，通过前缀npx来调用Prisma CLI:</p>
+<pre><code>npx prisma
+</code></pre>
+<p>通过使用以下命令创建Prisma schema文件来设置Prisma项目</p>
+<pre><code>npx prisma init
+</code></pre>
+<p>这个Prisma schema是什么呢<br/>
+咱们使用 npx prisma init 会建立一个名为prisma的新目录，其中包含一个名为schema.prisma的文件和一个位于项目根目录中的.env文件 <br/>
+schema.prisma中包含了prisma模式，简单来说就是连接什么数据库，还有prisma客户端生成器，这个我觉得不用了解，知道就好😁 <br/>
+.env是一个用于定义环境变量的文件（用于数据库连接）。</p>
+<h2 id="2连接数据库" class="relative group">2.连接数据库 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#2%e8%bf%9e%e6%8e%a5%e6%95%b0%e6%8d%ae%e5%ba%93" aria-label="锚点">#</a></span></h2>
+<h3 id="prismaschemaprisma" class="relative group">prisma/schema.prisma <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#prismaschemaprisma" aria-label="锚点">#</a></span></h3>
+<pre><code>datasource db {
+    provider = &quot;postgresql&quot;
+    url      = env(&quot;DATABASE_URL&quot;)
+}
+</code></pre>
+<p>嗯，这就是你应该在schema.prisma中应该看到的东西🧐，因为prisma默认使用的是postgresql，所以刚刚你用的init命令就建立了postgresql的连接，现在我们把它改成mysql的连接</p>
+<pre><code>datasource db {
+    provider = &quot;mysql&quot;
+    url      = env(&quot;DATABASE_URL&quot;)
+}
+</code></pre>
+<p>怎么样，是不是还挺简单的</p>
+<p>下面我们设置一下这个DATABASE_URL，如果你已经看过了.env文件，那你应该对这个东西不是很陌生。要连接mysql数据库，这个url的结构应该是这个样子的</p>
+<pre><code>mysql://Username:Password@Host:Port/Database
+</code></pre>
+<p>本地运行时，你的URL通常是这个样子的</p>
+<pre><code>DATABASE_URL=&quot;mysql://root:randompassword@localhost:3306/mydb&quot;
+</code></pre>
+<h2 id="3创建表单" class="relative group">3.创建表单 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#3%e5%88%9b%e5%bb%ba%e8%a1%a8%e5%8d%95" aria-label="锚点">#</a></span></h2>
+<p>接下来我们建一些表玩一下这个prisma，就用官方给出的例子吧</p>
+<h3 id="prismaschemaprisma-1" class="relative group">prisma/schema.prisma <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#prismaschemaprisma-1" aria-label="锚点">#</a></span></h3>
+<pre><code>model Post {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+  content   String?
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+}
+
+model Profile {
+  id     Int     @id @default(autoincrement())
+  bio    String?
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int     @unique
+}
+
+model User {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String?
+  posts   Post[]
+  profile Profile?
+}
+</code></pre>
+<p>这些数据模型需要映射到数据库中，我们使用prisma migrateCLI命令</p>
+<pre><code>npx prisma migrate dev --name init
+</code></pre>
+<p>这个name你可以自己取，它用于给你这次的记录命名<br/>
+现在我们的表单也创建好了，下面我们就要往表里添加数据并进行操作了！😋</p>
+<h2 id="4添加数据并进行操作" class="relative group">4.添加数据并进行操作！ <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#4%e6%b7%bb%e5%8a%a0%e6%95%b0%e6%8d%ae%e5%b9%b6%e8%bf%9b%e8%a1%8c%e6%93%8d%e4%bd%9c" aria-label="锚点">#</a></span></h2>
+<p>要开始使用Prisma Client，你需要安装@prisma/client包</p>
+<pre><code>npm install @prisma/client
+</code></pre>
+<p>安装命令会自动调用prisma generate，它会读取prisma模式并生成一个适合您的模型的prisma Client版本。</p>
+<p>这个generate命令嘛，官方的解释我还不是很懂，不过用我的理解来讲（比较浅显），就是它会根据你在schema.prisma文件里的模型去数据库里生成对应的表，有时间我再去看看吧🤣</p>
+<p>下面我们在根目录中建立一个index.js文件</p>
+<h3 id="indexjs" class="relative group">index.js <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#indexjs" aria-label="锚点">#</a></span></h3>
+<pre><code>const { PrismaClient } = require('@prisma/client')
+
+const prisma = new PrismaClient()
+
+async function main() {
+    const allUsers = await prisma.user.findMany()
+    console.log(allUsers)
+}
+
+main()
+  .catch((e) =&gt; {
+    throw e
+  })
+  .finally(async () =&gt; {
+    await prisma.$disconnect()
+  })
+</code></pre>
+<p>接着我们执行下面的命令</p>
+<pre><code>node index.js
+</code></pre>
+<p>结果应该是一个空的数组，很明显，我们没有添加数据嘛</p>
+<p>我们在原有的基础上加上一些代码</p>
+<pre><code>await prisma.user.create({
+    data: {
+        name: 'Alice',
+        email: 'alice@prisma.io',
+        posts: {
+            create: { title: 'Hello World' },
+        },
+        profile: {
+            create: { bio: 'I like turtles' },
+        },
+    },
+})
+</code></pre>
+<p>这就是添加数据的操作</p>
+<h4 id="完整版" class="relative group">完整版： <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#%e5%ae%8c%e6%95%b4%e7%89%88" aria-label="锚点">#</a></span></h4>
+<pre><code>async function main() {
+  await prisma.user.create({
+    data: {
+      name: 'Alice',
+      email: 'alice@prisma.io',
+      posts: {
+        create: { title: 'Hello World' },
+      },
+      profile: {
+        create: { bio: 'I like turtles' },
+      },
+    },
+  })
+
+  const allUsers = await prisma.user.findMany({
+    include: {
+      posts: true,
+      profile: true,
+    },
+  })
+  console.dir(allUsers, { depth: null })
+}
+</code></pre>
+<p>我们看到的结果应该是这样的：</p>
+<pre><code>[
+  {
+    email: 'alice@prisma.io',
+    id: 1,
+    name: 'Alice',
+    posts: [
+      {
+        content: null,
+        createdAt: 2020-03-21T16:45:01.246Z,
+        id: 1,
+        published: false,
+        title: 'Hello World',
+        authorId: 1,
+      }
+    ],
+    profile: {
+      bio: 'I like turtles',
+      id: 1,
+      userId: 1,
+    }
+  }
+]
+</code></pre>
+<p>查看数据库应该也能看到我们添加了相对应的数据</p>
+<p>下面再看看修改的操作</p>
+<pre><code>async function main() {
+  const post = await prisma.post.update({
+    where: { id: 1 },
+    data: { published: true },
+  })
+  console.log(post)
+}
+</code></pre>
+<p>你将看到以下输出</p>
+<pre><code>{
+    id: 1,
+    title: 'Hello World',
+    content: null,
+    published: true,
+    authorId: 1
+}
+</code></pre>
+<p>怎么样，是不是感觉prisma还是挺有意思的😊</p>
+<h2 id="5在浏览器中查看数据库" class="relative group">5.在浏览器中查看数据库 <span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style="text-decoration-line: none !important;" href="#5%e5%9c%a8%e6%b5%8f%e8%a7%88%e5%99%a8%e4%b8%ad%e6%9f%a5%e7%9c%8b%e6%95%b0%e6%8d%ae%e5%ba%93" aria-label="锚点">#</a></span></h2>
+<p>当时让我印象最深刻的还是prisma的这个功能，它可以在浏览器中看数据库耶！</p>
+<p>你只要在终端中输入以下命令</p>
+<pre><code>npx prisma studio
+</code></pre>
+<p>就可以在浏览器中查看你的数据库，可以在表中进行增删改查的操作，很方便不是吗？</p>
+<blockquote>
+<p>关于prisma连接mysql的简单操作应用就到这里了，这是我的第一篇博客，第一次写博客感觉花了好多时间，但是我觉得挺开心的，希望以后可以坚持下去，和你们分享学到的东西和我的理解🥳</p>
+</blockquote>
+
+      </div>
+    </section>
+    <footer class="pt-8 max-w-prose print:hidden">
+      
+  <div class="flex">
+    
+      
+      
+        
+        <img
+          class="!mt-0 !mb-0 h-24 w-24 rounded-full ltr:mr-4 rtl:ml-4"
+          width="96"
+          height="96"
+          alt="张某人"
+          src="/img/author_hu1689335fe00621c7b0e7aad782c43e3b_32581_192x192_fill_q75_box_smart1.jpg"
+        />
+      
+    
+    <div class="place-self-center">
+      
+        <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+          作者
+        </div>
+        <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+          张某人
+        </div>
+      
+      
+      <div class="text-2xl sm:text-lg">
+  <div class="flex flex-wrap text-neutral-400 dark:text-neutral-500">
+    
+      
+        <a
+          class="px-1 transition-transform hover:scale-125 hover:text-primary-700 dark:hover:text-primary-400"
+          href="https://github.com/1395520303"
+          target="_blank"
+          aria-label="Github"
+          rel="me noopener noreferrer"
+          >
+
+  <span class="relative inline-block align-text-bottom icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+
+  </span>
+
+</a
+        >
+      
+    
+  </div>
+
+</div>
+    </div>
+  </div>
+
+
+      
+
+      
+  
+
+
+      
+    </footer>
+  </article>
+
+        
+          <div
+            class="pointer-events-none absolute top-[100vh] bottom-0 w-12 ltr:right-0 rtl:left-0"
+          >
+            <a
+              href="#the-top"
+              class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 backdrop-blur hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+              aria-label="Scroll to top"
+              title="Scroll to top"
+            >
+              &uarr;
+            </a>
+          </div>
+        
+      </main><footer class="py-10 print:hidden">
+  
+  
+  <div class="flex items-center justify-between">
+    <div>
+      
+      
+        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+            &copy;
+            2022
+            张某人
+        </p>
+      
+      
+      
+        <p class="text-xs text-neutral-500 dark:text-neutral-400">
+          
+          
+          由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+            href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href="https://git.io/hugo-congo" target="_blank" rel="noopener noreferrer">Congo</a> 强力驱动
+        </p>
+      
+    </div>
+    
+    
+  </div>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 z-50 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://1395520303.github.io/"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative inline-block align-text-bottom icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="Search"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="Close (Esc)"
+      >
+        
+
+  <span class="relative inline-block align-text-bottom icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>小张的博客</title>
+    <link>https://1395520303.github.io/</link>
+    <description>Recent content on 小张的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Wed, 30 Nov 2022 21:24:24 +0800</lastBuildDate><atom:link href="https://1395520303.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用Prisma连接mysql</title>
+      <link>https://1395520303.github.io/articles/prisma-mysql/</link>
+      <pubDate>Sun, 20 Nov 2022 10:32:20 +0800</pubDate>
+      
+      <guid>https://1395520303.github.io/articles/prisma-mysql/</guid>
+      <description>第一次写博客有点不知所措，随便聊聊吧😋 之前跟着学Nestjs的时候视频里用了prisma，当时听的似懂非懂，感觉Nestjs好用又不好用，Nestjs没记住多少但是记住了prisma，所以现在想仔细学一下 本篇文章只是介绍一下prisma连接数据库（我用的是mysql）以及一些简单的操作（复杂的我暂时还用不上），所以如果有讲的不好的请多多见谅🤧</description>
+    </item>
+    
+  </channel>
+</rss>
